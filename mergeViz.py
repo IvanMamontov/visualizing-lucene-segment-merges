@@ -61,19 +61,18 @@ MERGE_COLORS = (
 )
 
 
-def parse_time(l):
+def parse_time(l, timeformat):
     m = reTime.search(l)
     # Expects these datetimes: 07 Jul 12:54:12.554
-    dt = datetime.strptime(m.group(1), '%d %b %H:%M:%S.%f')
-    diff_seconds = (dt - datetime.fromtimestamp(0)).total_seconds()
-    return diff_seconds
+    dt = datetime.strptime(m.group(1), timeformat)
+    return dt.timestamp()
 
 
-def main(log_files, output_file, temp_directory):
+def main(log_files, output_file, temp_directory, timeformat):
     global MAX_SEG_COUNT
     global MAX_SEG_SIZE_MB
 
-    merges, segToFullMB = parse(log_files)
+    merges, segToFullMB = parse(log_files, timeformat)
 
     MAX_SEG_COUNT = 1
     MAX_SEG_SIZE_MB = 0.0
@@ -238,7 +237,7 @@ reSeg2 = re.compile(r'seg=\*?(_.*?)\(.*?\):[cC]v?([0-9]+)(/[0-9]+)? .*?size=([0-
 reTime = re.compile(r'^(.*?) \[')
 
 
-def parse(log_files):
+def parse(log_files, timeformat):
     events = []
     segs = None
     segsToFullMB = {}
@@ -258,30 +257,30 @@ def parse(log_files):
                         if m2 is not None:
                             seg = m2.group(1)
                             # print 'matches %s' % str(m2.groups())
-                            delCount = m2.group(3)
-                            if delCount is not None:
-                                delCount = int(delCount[1:])
+                            del_count = m2.group(3)
+                            if del_count is not None:
+                                del_count = int(del_count[1:])
                             else:
-                                delCount = 0
+                                del_count = 0
                             docCount = int(m2.group(2))
 
                             undelSize = float(m2.group(4))
                             if seg not in segsToFullMB:
-                                if delCount != 0:
-                                    delRatio = float(delCount) / docCount
-                                    if delRatio < 1.0:
-                                        fullSize = undelSize / (1.0 - delRatio)
+                                if del_count != 0:
+                                    del_ratio = float(del_count) / docCount
+                                    if del_ratio < 1.0:
+                                        full_size = undelSize / (1.0 - del_ratio)
                                     else:
                                         # total guess!
                                         print('WARNING: total guess!')
-                                        fullSize = 0.1
+                                        full_size = 0.1
                                 else:
-                                    fullSize = undelSize
-                                segsToFullMB[seg] = fullSize
+                                    full_size = undelSize
+                                segsToFullMB[seg] = full_size
 
                             # seg name, fullMB, delPct
-                            assert delCount <= docCount, 'docCount %s delCount %s line %s' % (docCount, delCount, l)
-                            segs.append((seg, segsToFullMB[seg], float(delCount) / docCount))
+                            assert del_count <= docCount, 'docCount %s delCount %s line %s' % (docCount, del_count, l)
+                            segs.append((seg, segsToFullMB[seg], float(del_count) / docCount))
 
                 i = l.find('   add merge=')
                 if i != -1:
@@ -290,12 +289,12 @@ def parse(log_files):
                     for tup in reSeg1.findall(l):
                         seg = tup[0]
                         merged.append(seg)
-                    events.append(('merge', parse_time(l), merged))
+                    events.append(('merge', parse_time(l, timeformat), merged))
                     continue
 
                 if l.find(': findMerges: ') != -1:
                     segs = []
-                    t = parse_time(l)
+                    t = parse_time(l, timeformat)
 
     return events, segsToFullMB
 
@@ -315,15 +314,20 @@ def find_log_files(base_name):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('log_file')
-    parser.add_argument('output_file')
+    parser = argparse.ArgumentParser(
+        description="Parses infoStream output from IW and draws an movie showing the merges over time."
+    )
+    parser.add_argument('log_file', type=str, help='Log file or pattern')
+    parser.add_argument('output_file', type=str, help='Output mov file')
+    parser.add_argument('--timeformat', type=str, default='%d %b %H:%M:%S.%f', nargs='?',
+                        help='Time format, by default uses %d %b %H:%M:%S.%f which expects 07 Jul 12:54:12.554',
+                        required=False)
 
     args = parser.parse_args()
 
     log_files = find_log_files(args.log_file)
     for file in log_files:
-        print('Found', file)
+        print('Found {}'.format(file))
 
     with TemporaryDirectory(prefix="mergeimages-") as temp_directory:
-        main(log_files, args.output_file, temp_directory)
+        main(log_files, args.output_file, temp_directory, args.timeformat)
