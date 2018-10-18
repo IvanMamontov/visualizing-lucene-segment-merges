@@ -1,0 +1,275 @@
+{
+  "routing": {
+    "state": "STARTED",
+    "primary": false,
+    "node": "jxXzTfuGQxyyB6zLfTInfQ"
+  },
+  "num_committed_segments": 24,
+  "num_search_segments": 24,
+  "segments": {
+    "_jpik": {
+      "generation": 919532,
+      "num_docs": 684349,
+      "deleted_docs": 1330001,
+      "size_in_bytes": 1534063626,
+      "memory_in_bytes": 2872661,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": false
+    },
+    "_jpp8": {
+      "generation": 919772,
+      "num_docs": 1851739,
+      "deleted_docs": 2329748,
+      "size_in_bytes": 3331941509,
+      "memory_in_bytes": 5530996,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": false
+    },
+    "_jpuj": {
+      "generation": 919963,
+      "num_docs": 359693,
+      "deleted_docs": 283857,
+      "size_in_bytes": 495898598,
+      "memory_in_bytes": 1250479,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jq7o": {
+      "generation": 920436,
+      "num_docs": 130724,
+      "deleted_docs": 16402,
+      "size_in_bytes": 101753239,
+      "memory_in_bytes": 518190,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jq7s": {
+      "generation": 920440,
+      "num_docs": 126599,
+      "deleted_docs": 55803,
+      "size_in_bytes": 122579457,
+      "memory_in_bytes": 518959,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jq7t": {
+      "generation": 920441,
+      "num_docs": 446570,
+      "deleted_docs": 122527,
+      "size_in_bytes": 442044781,
+      "memory_in_bytes": 1091413,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jq85": {
+      "generation": 920453,
+      "num_docs": 732911,
+      "deleted_docs": 289622,
+      "size_in_bytes": 815270543,
+      "memory_in_bytes": 1575956,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": false
+    },
+    "_jq89": {
+      "generation": 920457,
+      "num_docs": 130275,
+      "deleted_docs": 76284,
+      "size_in_bytes": 128968830,
+      "memory_in_bytes": 529207,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jq8i": {
+      "generation": 920466,
+      "num_docs": 197115,
+      "deleted_docs": 69870,
+      "size_in_bytes": 170091095,
+      "memory_in_bytes": 599984,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jq8l": {
+      "generation": 920469,
+      "num_docs": 467987,
+      "deleted_docs": 142827,
+      "size_in_bytes": 461215536,
+      "memory_in_bytes": 1113357,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jq8z": {
+      "generation": 920483,
+      "num_docs": 1115064,
+      "deleted_docs": 90612,
+      "size_in_bytes": 916162001,
+      "memory_in_bytes": 1755955,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": false
+    },
+    "_jq9j": {
+      "generation": 920503,
+      "num_docs": 334428,
+      "deleted_docs": 227410,
+      "size_in_bytes": 400323154,
+      "memory_in_bytes": 995429,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jq9s": {
+      "generation": 920512,
+      "num_docs": 42699,
+      "deleted_docs": 10896,
+      "size_in_bytes": 33085703,
+      "memory_in_bytes": 334601,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jq9u": {
+      "generation": 920514,
+      "num_docs": 70802,
+      "deleted_docs": 7609,
+      "size_in_bytes": 45099961,
+      "memory_in_bytes": 354237,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jq9v": {
+      "generation": 920515,
+      "num_docs": 156269,
+      "deleted_docs": 3991,
+      "size_in_bytes": 86506780,
+      "memory_in_bytes": 447984,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jqa2": {
+      "generation": 920522,
+      "num_docs": 32862,
+      "deleted_docs": 61740,
+      "size_in_bytes": 59171866,
+      "memory_in_bytes": 443755,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jqab": {
+      "generation": 920531,
+      "num_docs": 46362,
+      "deleted_docs": 10284,
+      "size_in_bytes": 30855095,
+      "memory_in_bytes": 323931,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jqae": {
+      "generation": 920534,
+      "num_docs": 9560,
+      "deleted_docs": 4673,
+      "size_in_bytes": 6398232,
+      "memory_in_bytes": 213604,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jqaf": {
+      "generation": 920535,
+      "num_docs": 165780,
+      "deleted_docs": 15065,
+      "size_in_bytes": 118948562,
+      "memory_in_bytes": 586473,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jqai": {
+      "generation": 920538,
+      "num_docs": 7635,
+      "deleted_docs": 3454,
+      "size_in_bytes": 4870419,
+      "memory_in_bytes": 191148,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jqak": {
+      "generation": 920540,
+      "num_docs": 7652,
+      "deleted_docs": 2197,
+      "size_in_bytes": 4122766,
+      "memory_in_bytes": 176741,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jqal": {
+      "generation": 920541,
+      "num_docs": 6535,
+      "deleted_docs": 182,
+      "size_in_bytes": 3208924,
+      "memory_in_bytes": 183062,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jqan": {
+      "generation": 920543,
+      "num_docs": 12998,
+      "deleted_docs": 157,
+      "size_in_bytes": 5367179,
+      "memory_in_bytes": 181074,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    },
+    "_jqap": {
+      "generation": 920545,
+      "num_docs": 43464,
+      "deleted_docs": 0,
+      "size_in_bytes": 25549269,
+      "memory_in_bytes": 327301,
+      "committed": true,
+      "search": true,
+      "version": "6.6.1",
+      "compound": true
+    }
+  }
+}
