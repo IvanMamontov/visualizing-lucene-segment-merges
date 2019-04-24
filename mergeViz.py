@@ -137,9 +137,9 @@ def main(log_files, output_file, temp_directory, timeformat):
            '-mf',
            'type=png:w=%s:h=%s:fps=%s' % (WIDTH, HEIGHT, FPS),
            '-ovc',
-           'x264',
-           '-x264encopts',
-           'crf=15:frameref=6:threads=8:bframes=0:me=umh:partitions=all:trellis=1:direct_pred=auto:keyint=100:psnr',
+           'lavc',
+           '-lavcopts',
+           'vcodec=mjpeg',
            '-oac',
            'copy',
            '-o',
@@ -234,12 +234,12 @@ def draw(t, segs, mergeToColor, rightSegment, totMergeMB):
 
 reSeg1 = re.compile(r'\*?(_.*?)\(.*?\):[cC]v?([0-9]+)(/[0-9]+)?')
 reSeg2 = re.compile(r'seg=\*?(_.*?)\(.*?\):[cC]v?([0-9]+)(/[0-9]+)? .*?size=([0-9.]+) MB')
-reTime = re.compile(r'^(.*?) \[')
+reTime = re.compile(r'^(.*?) +[A-Z]+ +')
 
 
 def parse(log_files, timeformat):
     events = []
-    segs = None
+    segs = []
     segsToFullMB = {}
 
     for log_file in log_files:
@@ -247,54 +247,64 @@ def parse(log_files, timeformat):
             for l in f.readlines():
                 if l == '':
                     break
+                i = l.find('seg=')
+                if i != -1:
+                    l = l[i:]
+                    m2 = reSeg2.search(l)
+                    if m2 is not None:
+                        seg = m2.group(1)
+                        # print 'matches %s' % str(m2.groups())
+                        del_count = m2.group(3)
+                        if del_count is not None:
+                            del_count = int(del_count[1:])
+                        else:
+                            del_count = 0
+                        docCount = int(m2.group(2))
 
-                if segs is not None:
-                    if l.find('allowedSegmentCount=') != -1 or l.find('LMP:   level ') != -1:
-                        events.append(('index', t, segs))
-                        segs = None
-                    else:
-                        m2 = reSeg2.search(l)
-                        if m2 is not None:
-                            seg = m2.group(1)
-                            # print 'matches %s' % str(m2.groups())
-                            del_count = m2.group(3)
-                            if del_count is not None:
-                                del_count = int(del_count[1:])
-                            else:
-                                del_count = 0
-                            docCount = int(m2.group(2))
-
-                            undelSize = float(m2.group(4))
-                            if seg not in segsToFullMB:
-                                if del_count != 0:
-                                    del_ratio = float(del_count) / docCount
-                                    if del_ratio < 1.0:
-                                        full_size = undelSize / (1.0 - del_ratio)
-                                    else:
-                                        # total guess!
-                                        print('WARNING: total guess!')
-                                        full_size = 0.1
+                        undelSize = float(m2.group(4))
+                        if seg not in segsToFullMB:
+                            if del_count != 0:
+                                del_ratio = float(del_count) / docCount
+                                if del_ratio < 1.0:
+                                    full_size = undelSize / (
+                                                1.0 - del_ratio)
                                 else:
-                                    full_size = undelSize
-                                segsToFullMB[seg] = full_size
+                                    # total guess!
+                                    print('WARNING: total guess!')
+                                    full_size = 0.1
+                            else:
+                                full_size = undelSize
+                            segsToFullMB[seg] = full_size
 
-                            # seg name, fullMB, delPct
-                            assert del_count <= docCount, 'docCount %s delCount %s line %s' % (docCount, del_count, l)
-                            segs.append((seg, segsToFullMB[seg], float(del_count) / docCount))
+                        # seg name, fullMB, delPct
+                        assert del_count <= docCount, 'docCount %s delCount %s line %s' % (
+                        docCount, del_count, l)
+                        segs.append((seg, segsToFullMB[seg],
+                                     float(del_count) / docCount))
+                        continue
+
+                if segs and (l.find('allowedSegmentCount=') != -1 or l.find('LMP:   level ') != -1):
+                    events.append(('index', t, segs))
+                    segs = []
+                    continue
 
                 i = l.find('   add merge=')
                 if i != -1:
-                    l2 = reSeg1.findall(l)
+                    t = parse_time(l, timeformat)
+                    l = l[i:]
                     merged = []
                     for tup in reSeg1.findall(l):
                         seg = tup[0]
                         merged.append(seg)
-                    events.append(('merge', parse_time(l, timeformat), merged))
+                    events.append(('merge', t, merged))
                     continue
 
                 if l.find(': findMerges: ') != -1:
-                    segs = []
                     t = parse_time(l, timeformat)
+                    if segs:
+                        events.append(('index', t, segs))
+                    segs = []
+                    continue
 
     return events, segsToFullMB
 
@@ -319,7 +329,7 @@ if __name__ == '__main__':
     )
     parser.add_argument('log_file', type=str, help='Log file or pattern')
     parser.add_argument('output_file', type=str, help='Output mov file')
-    parser.add_argument('--timeformat', type=str, default='%d %b %H:%M:%S.%f', nargs='?',
+    parser.add_argument('--timeformat', type=str, default='%Y-%m-%d %H:%M:%S.%f', nargs='?',
                         help='Time format, by default uses %d %b %H:%M:%S.%f which expects 07 Jul 12:54:12.554',
                         required=False)
 
