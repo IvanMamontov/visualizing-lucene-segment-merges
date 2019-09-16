@@ -233,7 +233,7 @@ def draw(t, segs, mergeToColor, rightSegment, totMergeMB):
 
 
 reSeg1 = re.compile(r'\*?(_.*?)\(.*?\):[cC]v?([0-9]+)(/[0-9]+)?')
-reSeg2 = re.compile(r'seg=\*?(_.*?)\(.*?\):[cC]v?([0-9]+)(/[0-9]+)? .*?size=([0-9.]+) MB')
+reSeg2 = re.compile(r'seg=\*?(_.*?)\(.*?\):[cC]v?([0-9]+)(/[0-9]+)?.*?size=([0-9.]+) MB')
 reTime = re.compile(r'^(.*?) +[A-Z]+ +')
 
 
